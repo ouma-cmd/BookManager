@@ -8,6 +8,6 @@ const { loginController, registerController } = authController;
 const route = express.Router();
 
 route.post("/register", valideSchema(validateRegister), registerController);
-route.get("/login", valideSchema(valideLogin), loginController);
+route.post("/login", valideSchema(valideLogin), loginController);
 
 export default route;
