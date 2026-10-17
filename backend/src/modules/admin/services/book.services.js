@@ -29,12 +29,17 @@ async function creationBook(
   return creeBook;
 }
 
-async function getBook() {
-  const afficherBook = await bookModel.find();
-  if (afficherBook === 0) {
-    return null;
-  }
-  return afficherBook;
+async function getBook({ page = 1, limit = 10 }) {
+  const skip = (page - 1) * limit;
+  const afficherBook = await bookModel.find().skip(skip).limit(limit);
+  const totalBook = await bookModel.countDocuments();
+
+  return {
+    data: afficherBook,
+    currentPage: page,
+    totalBooks: totalBook,
+    totalPages: Math.ceil(totalBook / limit),
+  };
 }
 
 async function getbookById(id) {

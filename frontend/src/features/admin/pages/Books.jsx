@@ -10,22 +10,26 @@ export default function Books() {
   const [book, setBook] = useState(false);
   const [view, setView] = useState(null);
   const [update, setUpdate] = useState(null);
+  const [totalPages, settotalPages] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
 
   function handlAdd() {
     setBook(true);
   }
-  async function getBook() {
-    const responce = await api.get("/getBook");
+  async function getBook(page = 1) {
+    const response = await api.get(`/getBook?page=${page}&limit=5`);
 
-    setState(responce.data);
+    setState(response.data.data);
+    settotalPages(response.data.totalPages);
   }
+
   useEffect(() => {
-    getBook();
-  }, []);
+    getBook(currentPage);
+  }, [currentPage]);
 
   async function deletBook(id) {
     const responce = await api.delete(`/deleteBook/${id}`);
-    getBook();
+    getBook(currentPage);
   }
 
   function viewBook(id) {
@@ -47,7 +51,10 @@ export default function Books() {
     "
     >
       {book && (
-        <AddBook onClose={() => setBook(false)} refreshBooks={getBook} />
+        <AddBook
+          onClose={() => setBook(false)}
+          refreshBooks={() => getBook(currentPage)}
+        />
       )}
       {view && <ViewBook id={view} onClose={() => setView(false)} />}
 
@@ -218,6 +225,66 @@ export default function Books() {
             </tbody>
           </table>
         </div>
+      </div>
+      <div className="flex justify-center items-center gap-3 mt-8">
+        <button
+          disabled={currentPage === 1}
+          onClick={() => setCurrentPage(currentPage - 1)}
+          className={`
+      px-4
+      py-2
+      rounded-xl
+      border
+      transition
+      ${
+        currentPage === 1
+          ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+          : "bg-white hover:bg-[#3ECF8E] hover:text-white"
+      }
+    `}
+        >
+          Prev
+        </button>
+
+        {Array.from({ length: totalPages }, (_, index) => (
+          <button
+            key={index}
+            onClick={() => setCurrentPage(index + 1)}
+            className={`
+        w-10
+        h-10
+        rounded-xl
+        font-medium
+        transition
+        ${
+          currentPage === index + 1
+            ? "bg-[#3ECF8E] text-white shadow-lg"
+            : "bg-white border hover:border-[#3ECF8E] hover:text-[#3ECF8E]"
+        }
+      `}
+          >
+            {index + 1}
+          </button>
+        ))}
+
+        <button
+          disabled={currentPage === totalPages}
+          onClick={() => setCurrentPage(currentPage + 1)}
+          className={`
+      px-4
+      py-2
+      rounded-xl
+      border
+      transition
+      ${
+        currentPage === totalPages
+          ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+          : "bg-white hover:bg-[#3ECF8E] hover:text-white"
+      }
+    `}
+        >
+          Next
+        </button>
       </div>
     </div>
   );

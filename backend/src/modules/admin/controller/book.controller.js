@@ -37,10 +37,14 @@ async function creationBookController(req, res) {
 }
 
 async function getBookController(req, res) {
-  const affichLivre = await getBook();
-  if (!affichLivre) {
-    return res.status(400).json("not fond the book");
-  }
+  const page = Number(req.query.page);
+  const limit = Number(req.query.limit);
+
+  const affichLivre = await getBook({
+    page,
+    limit,
+  });
+
   return res.status(200).json(affichLivre);
 }
 

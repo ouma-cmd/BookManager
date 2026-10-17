@@ -6,26 +6,29 @@ import UserView from "../components/ViewUser";
 export default function Users() {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [totalPages, settotalPages] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  async function getUsers() {
+  async function getUsers(page = 1) {
     try {
-      const response = await api.get("/getuser");
+      const response = await api.get(`/getuser?page=${page}&limit=5`);
 
-      setUsers(response.data);
+      setUsers(response.data.data);
+      settotalPages(response.data.totalPages);
     } catch (error) {
       console.log(error);
     }
   }
 
   useEffect(() => {
-    getUsers();
-  }, []);
+    getUsers(currentPage);
+  }, [currentPage]);
 
   async function deleteUser(id) {
     try {
       await api.delete(`/deleteuser/${id}`);
 
-      getUsers();
+      getUsers(currentPage);
     } catch (error) {
       console.log(error);
     }
@@ -204,6 +207,66 @@ export default function Users() {
             ))}
           </tbody>
         </table>
+      </div>
+      <div className="flex justify-center items-center gap-3 mt-8">
+        <button
+          disabled={currentPage === 1}
+          onClick={() => setCurrentPage(currentPage - 1)}
+          className={`
+      px-4
+      py-2
+      rounded-xl
+      border
+      transition
+      ${
+        currentPage === 1
+          ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+          : "bg-white hover:bg-[#3ECF8E] hover:text-white"
+      }
+    `}
+        >
+          Prev
+        </button>
+
+        {Array.from({ length: totalPages }, (_, index) => (
+          <button
+            key={index}
+            onClick={() => setCurrentPage(index + 1)}
+            className={`
+        w-10
+        h-10
+        rounded-xl
+        font-medium
+        transition
+        ${
+          currentPage === index + 1
+            ? "bg-[#3ECF8E] text-white shadow-lg"
+            : "bg-white border hover:border-[#3ECF8E] hover:text-[#3ECF8E]"
+        }
+      `}
+          >
+            {index + 1}
+          </button>
+        ))}
+
+        <button
+          disabled={currentPage === totalPages}
+          onClick={() => setCurrentPage(currentPage + 1)}
+          className={`
+      px-4
+      py-2
+      rounded-xl
+      border
+      transition
+      ${
+        currentPage === totalPages
+          ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+          : "bg-white hover:bg-[#3ECF8E] hover:text-white"
+      }
+    `}
+        >
+          Next
+        </button>
       </div>
     </div>
   );

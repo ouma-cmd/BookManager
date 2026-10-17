@@ -5,10 +5,10 @@ import {
 } from "../services/user.services.js";
 
 async function getUserController(req, res) {
-  const getUsers = await getuser();
-  if (!getUsers) {
-    return res.status(400).json("not find user");
-  }
+  const { page, limit } = req.query;
+
+  const getUsers = await getuser(Number(page), Number(limit));
+
   return res.status(200).json(getUsers);
 }
 
