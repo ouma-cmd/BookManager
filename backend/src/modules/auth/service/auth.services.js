@@ -36,9 +36,11 @@ async function loginServices(email, password) {
     const token = jwt.sign(payload, secret, option);
     return {
       token,
-      id: findemail._id,
-      name: findemail.name,
-      role: findemail.role,
+      user: {
+        id: findemail._id,
+        name: findemail.name,
+        role: findemail.role,
+      },
     };
   }
   return null;

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { NavLink, redirect, useNavigate } from "react-router-dom";
-import api from "../../../api/axios";
+import api from "../../../api/auth";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -24,8 +24,8 @@ export default function Login() {
       });
 
       localStorage.setItem("token", responce.data.token);
-      JSON.stringify(responce.data.user);
-      navigate("/register");
+      localStorage.setItem("user", JSON.stringify(responce.data.user));
+      navigate("/dashboard");
     } catch (error) {
       console.log("BACKEND MESSAGE:", error.response?.data);
     }
