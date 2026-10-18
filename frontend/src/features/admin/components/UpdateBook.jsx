@@ -105,6 +105,7 @@ export default function UpdateBook({ id, onClose, refreshBooks }) {
         "
         >
           {[
+            ["image", "image"],
             ["title", "Title"],
             ["author", "Author"],
             ["category", "Category"],

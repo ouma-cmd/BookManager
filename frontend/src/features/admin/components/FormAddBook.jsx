@@ -4,6 +4,7 @@ import api from "../../../api/admin";
 
 export default function AddBook({ refreshBooks, onClose }) {
   const [form, setForm] = useState({
+    image: "",
     title: "",
     author: "",
     category: "",
@@ -29,7 +30,7 @@ export default function AddBook({ refreshBooks, onClose }) {
       const res = await api.post("/creationBook", form);
 
       refreshBooks();
-      
+
       console.log("created book:", res.data);
 
       onClose();
@@ -128,6 +129,25 @@ export default function AddBook({ refreshBooks, onClose }) {
               gap-5
             "
           >
+            <input
+              type="text"
+              value={form.image}
+              onChange={handleChange}
+              name="image"
+              placeholder="Book image URL"
+              className="
+                w-full
+                border
+                border-gray-200
+                rounded-xl
+                px-4
+                py-3
+                text-sm
+                outline-none
+                focus:ring-2
+                focus:ring-[#3ECF8E]
+              "
+            />
             <input
               name="title"
               value={form.title}

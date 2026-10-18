@@ -1,6 +1,7 @@
 import bookModel from "../models/book.model.js";
 
 async function creationBook(
+  image,
   title,
   author,
   category,
@@ -16,6 +17,7 @@ async function creationBook(
     return null;
   }
   const creeBook = await bookModel.create({
+    image,
     title,
     author,
     category,
@@ -29,10 +31,22 @@ async function creationBook(
   return creeBook;
 }
 
-async function getBook({ page = 1, limit = 10 }) {
+async function getBook({ page = 1, limit = 10, category, search }) {
+  const filter = {};
+  if (category) {
+    filter.category = category;
+  }
+
+  if (search) {
+    filter.title = {
+      $regex: search,
+      $options: "i",
+    };
+  }
+
   const skip = (page - 1) * limit;
-  const afficherBook = await bookModel.find().skip(skip).limit(limit);
-  const totalBook = await bookModel.countDocuments();
+  const afficherBook = await bookModel.find(filter).skip(skip).limit(limit);
+  const totalBook = await bookModel.countDocuments(filter);
 
   return {
     data: afficherBook,
@@ -52,6 +66,7 @@ async function getbookById(id) {
 
 async function updateBooks(
   id,
+  image,
   title,
   author,
   category,
@@ -70,6 +85,7 @@ async function updateBooks(
     id,
     {
       title,
+      image,
       author,
       category,
       summary,

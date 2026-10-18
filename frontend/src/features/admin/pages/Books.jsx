@@ -12,20 +12,26 @@ export default function Books() {
   const [update, setUpdate] = useState(null);
   const [totalPages, settotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
+  const [search, setSearch] = useState("");
+  const [category, setCategory] = useState("");
+  const [filterCategory, setFilterCategory] = useState("");
 
   function handlAdd() {
     setBook(true);
   }
   async function getBook(page = 1) {
-    const response = await api.get(`/getBook?page=${page}&limit=5`);
-
+    console.log("CATEGORY:", category);
+    const response = await api.get(
+      `/getBook?page=${page}&limit=3&category=${filterCategory}&search=${search}`,
+    );
+    console.log("RESULT:", response.data.data);
     setState(response.data.data);
     settotalPages(response.data.totalPages);
   }
 
   useEffect(() => {
     getBook(currentPage);
-  }, [currentPage]);
+  }, [currentPage, filterCategory, search]);
 
   async function deletBook(id) {
     const responce = await api.delete(`/deleteBook/${id}`);
@@ -113,7 +119,50 @@ export default function Books() {
       </div>
 
       {/* Table */}
+      <div className="bg-white rounded-2xl shadow-sm border p-5 mb-6">
+        <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
+          {/* Search */}
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => {
+              (setSearch(e.target.value), setCurrentPage(1));
+            }}
+            placeholder="🔍 Search books..."
+            className="w-full lg:w-80 border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#3ECF8E]"
+          />
 
+          <div className="flex flex-wrap gap-3">
+            {/* Category */}
+            <select
+              value={category}
+              onChange={(e) => {
+                setCategory(e.target.value);
+              }}
+              className="border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#3ECF8E]"
+            >
+              <option value="">All Categories</option>
+              <option value="Roman">Roman</option>
+              <option value="Novel">Novel</option>
+              <option value="Business">Business</option>
+              <option value="Technology">Technology</option>
+              <option value="History">History</option>
+              <option value="Self Development">Self Development</option>
+            </select>
+
+            {/* Button */}
+            <button
+              onClick={() => {
+                setCurrentPage(1);
+                setFilterCategory(category);
+              }}
+              className="bg-[#3ECF8E] text-white px-6 py-3 rounded-xl hover:bg-[#34b87f] transition"
+            >
+              Filter
+            </button>
+          </div>
+        </div>
+      </div>
       <div
         className="
         bg-white
@@ -138,6 +187,7 @@ export default function Books() {
             "
             >
               <tr>
+                <th className="px-8 py-5 text-left">Image</th>
                 <th className="px-6 py-4 text-left">Title</th>
 
                 <th className="px-6 py-4 text-left">Author</th>
@@ -161,6 +211,19 @@ export default function Books() {
                     hover:bg-gray-50
                   "
                 >
+                  <td className="px-8 py-5">
+                    <img
+                      src={book.image}
+                      alt={book.title}
+                      className="
+                          w-14
+                          h-14
+                          rounded-xl
+                          object-cover
+                          "
+                    />
+                  </td>
+
                   <td className="px-6 py-4 font-medium">{book.title}</td>
 
                   <td className="px-6 py-4 text-gray-600">{book.author}</td>

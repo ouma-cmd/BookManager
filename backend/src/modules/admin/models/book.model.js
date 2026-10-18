@@ -2,6 +2,9 @@ import mongoose from "mongoose";
 
 const schemaBook = new mongoose.Schema(
   {
+    image: {
+      type: String,
+    },
     title: {
       type: String,
       required: true,

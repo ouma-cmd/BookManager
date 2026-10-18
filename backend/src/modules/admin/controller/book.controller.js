@@ -8,6 +8,7 @@ import {
 
 async function creationBookController(req, res) {
   const {
+    image,
     title,
     author,
     category,
@@ -20,6 +21,7 @@ async function creationBookController(req, res) {
   } = req.body;
 
   const creatBook = await creationBook(
+    image,
     title,
     author,
     category,
@@ -37,12 +39,15 @@ async function creationBookController(req, res) {
 }
 
 async function getBookController(req, res) {
+  const { category, search } = req.query;
   const page = Number(req.query.page);
   const limit = Number(req.query.limit);
 
   const affichLivre = await getBook({
     page,
     limit,
+    category,
+    search,
   });
 
   return res.status(200).json(affichLivre);
@@ -60,6 +65,7 @@ async function getBookByIdController(req, res) {
 async function updateBookController(req, res) {
   const id = req.params.id;
   const {
+    image,
     title,
     author,
     category,
@@ -73,6 +79,7 @@ async function updateBookController(req, res) {
 
   const updatbook = await updateBooks(
     id,
+    image,
     title,
     author,
     category,
