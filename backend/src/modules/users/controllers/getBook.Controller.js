@@ -1,11 +1,18 @@
 import { getBooks, getbooksById } from "../services/getBooks.services.js";
 
 async function getBookController(req, res) {
-  const { category, search } = req.query;
+  const { category, language, rating, search } = req.query;
   const page = Number(req.query.page);
   const limit = Number(req.query.limit);
 
-  const getBook = await getBooks(page, limit, category, search);
+  const getBook = await getBooks({
+    page,
+    limit,
+    category,
+    language,
+    rating,
+    search,
+  });
   if (!getBook) {
     return res.status(400).json("not found");
   }
