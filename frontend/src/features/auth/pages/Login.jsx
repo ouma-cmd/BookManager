@@ -25,7 +25,16 @@ export default function Login() {
 
       localStorage.setItem("token", responce.data.token);
       localStorage.setItem("user", JSON.stringify(responce.data.user));
-      navigate("/dashboard");
+
+      const role = responce.data.user.role;
+
+      console.log("ROLE:", role);
+
+      if (role === "admin") {
+        navigate("/dashboard");
+      } else {
+        navigate("/booksUsers");
+      }
     } catch (error) {
       console.log("BACKEND MESSAGE:", error.response?.data);
     }
