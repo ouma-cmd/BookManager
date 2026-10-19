@@ -2,7 +2,8 @@ import express from "express";
 import cors from "cors";
 import connectDb from "./src/config/database.js";
 import auth from "./src/modules/auth/router/auth.route.js";
-import admin from "./src/modules/admin/router/admin.route.js"
+import admin from "./src/modules/admin/router/admin.route.js";
+import user from "./src/modules/users/routers/users.route.js";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -16,7 +17,9 @@ app.use(express.json());
 
 app.use("/api/auth", auth);
 
-app.use("/api/Admin", admin)
+app.use("/api/Admin", admin);
+
+app.use("/api/users", user);
 
 app.listen(port, () => {
   console.log("welcome port :", port);
