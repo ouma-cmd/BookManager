@@ -1,7 +1,7 @@
 import { describe, test, expect, vi } from "vitest";
 
-import authServices from "../src/modules/auth/service/auth.services.js";
-import User from "../src/modules/auth/Model/auth.model.js";
+import authServices from "../modules/auth/service/auth.services.js";
+import User from "../modules/auth/Model/auth.model.js";
 
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
