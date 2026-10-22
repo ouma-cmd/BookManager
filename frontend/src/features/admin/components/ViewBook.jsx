@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import api from "../../../api/admin";
 import { useEffect, useState } from "react";
 
-export default function ViewBook({ id }) {
+export default function ViewBook({ id, onClose }) {
   console.log("ViewBook loaded");
   const navigate = useNavigate();
 
@@ -26,8 +26,8 @@ export default function ViewBook({ id }) {
   }, [id]);
 
   return (
-    <div className="min-h-screen bg-gray-100 p-4 sm:p-6 lg:p-10">
-      <div className="max-w-5xl mx-auto bg-white rounded-3xl shadow-lg overflow-hidden">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-3xl w-full max-w-5xl max-h-[90vh] overflow-auto">
         {/* Header */}
         <div className="bg-[#3ECF8E] text-white p-6 flex items-center justify-between">
           <div>
@@ -36,7 +36,7 @@ export default function ViewBook({ id }) {
           </div>
 
           <button
-            onClick={() => navigate(0)}
+            onClick={onClose}
             className="bg-white text-[#3ECF8E] p-3 rounded-xl hover:bg-gray-100 transition"
           >
             <ArrowLeft />
